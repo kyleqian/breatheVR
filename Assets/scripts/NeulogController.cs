@@ -6,12 +6,14 @@ using SimpleJSON;
 
 public class NeulogController : MonoBehaviour {
 
-	//public Light lightSource;
-	//public Light flameLightSource;
-	//public ParticleSystem flame;
-	//private float maxFlameStartSize;
-	//private float maxFlameStartSpeed;
- //   private const float MaxIntensity = 8.0f; // Actual max intensity of particle at time of writing
+    //public Light lightSource;
+    //public Light flameLightSource;
+    //public ParticleSystem flame;
+    //private float maxFlameStartSize;
+    //private float maxFlameStartSpeed;
+    //   private const float MaxIntensity = 8.0f; // Actual max intensity of particle at time of writing
+
+    public GameObject sphere;
 
 	private HttpWebRequest request;
 	private const string Url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Respiration],[1]";
@@ -46,19 +48,24 @@ public class NeulogController : MonoBehaviour {
 	void Start() {
         // The API seems to be capped somewhere around 30-40 calls/s
         InvokeRepeating("QueryAPI", 0.0f, 1.0f/APICallsPerSecond);
+        message = "Calibrating...";
+    
+        if (sphere) {
+            sphere.transform.localScale = new Vector3(1.0f, 1.0f, 0);
+        }
 
-  //      if (flame) {
-		//	maxFlameStartSize = flame.startSize;
-		//	maxFlameStartSpeed = flame.startSpeed;
-		//	flame.startSize = 0;
-		//	flame.startSpeed = 0;
-		//	flameLightSource.intensity = 0;
-		//}
-		message = "Calibrating...";
-	}
-	
-	// Update is called once per frame
-	void Update() {
+        //// Flame initialization
+        //if (flame) {
+        //    maxFlameStartSize = flame.startSize;
+        //    maxFlameStartSpeed = flame.startSpeed;
+        //    flame.startSize = 0;
+        //    flame.startSpeed = 0;
+        //    flameLightSource.intensity = 0;
+        //}
+    }
+
+    // Update is called once per frame
+    void Update() {
         if (calibrating) {
             // Precalibration
             if (preCalibrationSeconds > 0) {
@@ -81,17 +88,24 @@ public class NeulogController : MonoBehaviour {
 		}
 
         if (!calibrating) {
-            float percentageOfMax = Mathf.Max(0.0f, Mathf.Min(1.0f, (float)(airPressure - lowPressure) / pressureRange));
+            //float percentageOfMax = Mathf.Max(0.0f, Mathf.Min(1.0f, (float)(airPressure - lowPressure) / pressureRange));
             //message = percentageOfMax.ToString();
+            float lowerBoundedPercentageOfMax = Mathf.Max(0.0f, (float)(airPressure - lowPressure) / pressureRange);
 
-   //         // Flame behavior
-   //         if (lightSource.isActiveAndEnabled) {
-			//	lightSource.intensity = MaxIntensity * percentageOfMax;
-			//} else if (flameLightSource && flame) {
-			//	flame.startSize = maxFlameStartSize * percentageOfMax;
-			//	flame.startSpeed = maxFlameStartSpeed * percentageOfMax;
-			//	flameLightSource.intensity = MaxIntensity * percentageOfMax;
-			//}
+            if (sphere) {
+                float scale = 10.0f * lowerBoundedPercentageOfMax;
+                sphere.transform.localScale = new Vector3(scale, scale, 0);
+            }
+
+
+            //         // Flame behavior
+            //         if (lightSource.isActiveAndEnabled) {
+            //	lightSource.intensity = MaxIntensity * percentageOfMax;
+            //} else if (flameLightSource && flame) {
+            //	flame.startSize = maxFlameStartSize * percentageOfMax;
+            //	flame.startSpeed = maxFlameStartSpeed * percentageOfMax;
+            //	flameLightSource.intensity = MaxIntensity * percentageOfMax;
+            //}
         }
     }
 
