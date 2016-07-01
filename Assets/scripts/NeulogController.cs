@@ -13,7 +13,7 @@ public class NeulogController : MonoBehaviour {
     //private float maxFlameStartSpeed;
     //   private const float MaxIntensity = 8.0f; // Actual max intensity of particle at time of writing
 
-    public GameObject sphere;
+    public GameObject circle;
 
 	private HttpWebRequest request;
 	private const string Url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Respiration],[1]";
@@ -50,8 +50,8 @@ public class NeulogController : MonoBehaviour {
         InvokeRepeating("QueryAPI", 0.0f, 1.0f/APICallsPerSecond);
         message = "Calibrating...";
     
-        if (sphere) {
-            sphere.transform.localScale = new Vector3(1.0f, 1.0f, 0);
+        if (circle) {
+            circle.transform.localScale = new Vector3(1.0f, 1.0f, 0);
         }
 
         //// Flame initialization
@@ -92,9 +92,9 @@ public class NeulogController : MonoBehaviour {
             //message = percentageOfMax.ToString();
             float lowerBoundedPercentageOfMax = Mathf.Max(0.0f, (float)(airPressure - lowPressure) / pressureRange);
 
-            if (sphere) {
+            if (circle) {
                 float scale = 10.0f * lowerBoundedPercentageOfMax;
-                sphere.transform.localScale = new Vector3(scale, scale, 0);
+                circle.transform.localScale = new Vector3(scale, scale, 0);
             }
 
 
@@ -196,7 +196,7 @@ public class NeulogController : MonoBehaviour {
 		Rect rect = new Rect(0, 0, w, h * 2 / 100);
 		style.alignment = TextAnchor.UpperLeft;
 		style.fontSize = h * 6 / 100;
-		style.normal.textColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+		style.normal.textColor = new Color(0, 0, 0, 1.0f);
 		string text = message;
 		GUI.Label(rect, text, style);
 	}
