@@ -51,7 +51,7 @@ public class NeulogController : MonoBehaviour {
         message = "Calibrating...";
     
         if (circle) {
-            circle.transform.localScale = new Vector3(1.0f, 1.0f, 0);
+            circle.transform.localScale = new Vector3(0, 0, 0);
         }
 
         //// Flame initialization
@@ -89,8 +89,8 @@ public class NeulogController : MonoBehaviour {
 
         if (!calibrating) {
             //float percentageOfMax = Mathf.Max(0.0f, Mathf.Min(1.0f, (float)(airPressure - lowPressure) / pressureRange));
-            //message = percentageOfMax.ToString();
             float lowerBoundedPercentageOfMax = Mathf.Max(0.0f, (float)(airPressure - lowPressure) / pressureRange);
+            message = lowerBoundedPercentageOfMax.ToString("F2");
 
             if (circle) {
                 float scale = 10.0f * lowerBoundedPercentageOfMax;
@@ -137,40 +137,40 @@ public class NeulogController : MonoBehaviour {
             ////message =  string.Format("{0}", rateDisplay.ToString());
             //timeOfLastPing = timeOfCurrentPing;
 
-            float timeNow = Time.time;
+            //float timeNow = Time.time;
 
-            if (neitherPeakOrValley != 2) {
-                if (airPressure > previousPeakHeight) {
-                    previousPeakHeight = airPressure;
-                    previousPeakTime = timeNow;
-                }
+            //if (neitherPeakOrValley != 2) {
+            //    if (airPressure > previousPeakHeight) {
+            //        previousPeakHeight = airPressure;
+            //        previousPeakTime = timeNow;
+            //    }
 
-                if (timeNow - previousPeakTime >= DetectionDelay) {
-                    if (previousPeaks.Count == MaxPreviousPeaks) previousPeaks.Dequeue();
-                    previousPeaks.Enqueue(previousPeakTime);
+            //    if (timeNow - previousPeakTime >= DetectionDelay) {
+            //        if (previousPeaks.Count == MaxPreviousPeaks) previousPeaks.Dequeue();
+            //        previousPeaks.Enqueue(previousPeakTime);
 
-                    peakValleyChange(2);
-                }
-            }
+            //        peakValleyChange(2);
+            //    }
+            //}
 
-            if (neitherPeakOrValley != 1) {
-                if (airPressure < previousValleyHeight) {
-                    previousValleyHeight = airPressure;
-                    previousValleyTime = timeNow;
-                }
+            //if (neitherPeakOrValley != 1) {
+            //    if (airPressure < previousValleyHeight) {
+            //        previousValleyHeight = airPressure;
+            //        previousValleyTime = timeNow;
+            //    }
 
-                if (timeNow - previousValleyTime >= DetectionDelay) {
-                    peakValleyChange(1);
-                }
-            }
+            //    if (timeNow - previousValleyTime >= DetectionDelay) {
+            //        peakValleyChange(1);
+            //    }
+            //}
 
-            if (previousPeaks.Count >= 2) {
-                var previousPeaksArray = previousPeaks.ToArray();
-                float averageTimeBetweenPeaks = 0;
-                for (int i = previousPeaks.Count - 1; i > 0; --i) averageTimeBetweenPeaks += (previousPeaksArray[i] - previousPeaksArray[i - 1]);
-                averageTimeBetweenPeaks /= previousPeaks.Count;
-                message = averageTimeBetweenPeaks.ToString();
-            }
+            //if (previousPeaks.Count >= 2) {
+            //    var previousPeaksArray = previousPeaks.ToArray();
+            //    float averageTimeBetweenPeaks = 0;
+            //    for (int i = previousPeaks.Count - 1; i > 0; --i) averageTimeBetweenPeaks += (previousPeaksArray[i] - previousPeaksArray[i - 1]);
+            //    averageTimeBetweenPeaks /= previousPeaks.Count;
+            //    message = averageTimeBetweenPeaks.ToString();
+            //}
 
         } else {
             // Probably means over API limit
