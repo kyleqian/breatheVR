@@ -20,9 +20,10 @@ public class CandleNeulog : MonoBehaviour {
     const float MaxFlameSizeGrow = -0.10f;
 
     private HttpWebRequest request;
-	private const string Url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Respiration],[1]";
+//	private const string Url = "http://localhost:22002/NeuLogAPI?GetSensorValue:[Respiration],[1]";
+	private const string Url = "http://10.31.16.23:22002/NeuLogAPI?GetSensorValue:[Respiration],[1]";
     private int nullCounter = 0;
-    private const int APICallsPerSecond = 40;
+    private const int APICallsPerSecond = 20;
 
     private string message = "";
 
